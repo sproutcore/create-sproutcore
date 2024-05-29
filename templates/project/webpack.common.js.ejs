@@ -1,0 +1,89 @@
+import fs from 'fs';
+import path from 'path';
+import FaviconsWebpackPlugin from 'favicons-webpack-plugin';
+import CssMinimizePlugin from "css-minimizer-webpack-plugin";
+import CopyPlugin from 'copy-webpack-plugin';
+import { getLangCodes, getEntrypoints, getHtmlPluginConfigs, SPROUTCORE_PATH, AKI_THEME_PATH, getModuleRules } from 'sproutcore/webpacklib';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+
+const __dirname = new URL('.', import.meta.url).pathname;
+
+const THEME_PATH = AKI_THEME_PATH;
+
+const ASSETS_PATH = 'assets';
+
+/**
+ *  use this to set the name, so that webpack can discover the correct folder
+ *  this is exported, so that the appNames can be used in the webpack.dev.js and webpack.prod.js
+ */
+export const appNames = ['<%= appname %>'];
+
+/**
+ * please add any frameworks you use in this list. This allows importing / requiring them in your app
+ * in the same way as you would import a module from node_modules
+ */
+export const frameworkNames = ['<%= framework %>'];
+
+const langCodes = getLangCodes(path.resolve(__dirname, 'apps'));
+
+export default (options = {}) => {
+
+    const publicPath = options.publicPath !== undefined ? options.publicPath : undefined;
+    const entry = getEntrypoints(langCodes, appNames, frameworkNames);
+    console.log('entry', entry);
+    return {
+        context: __dirname,
+        experiments: {
+            layers: true,
+        },
+        entry,
+        output: {
+            filename: '[name]/[name].[contenthash].js',
+            path: path.resolve(__dirname, 'dist'),
+            globalObject: 'window',
+            assetModuleFilename: `${ASSETS_PATH}/[name].[hash][ext][query]`,
+            clean: true,
+            publicPath: publicPath !== undefined ? `${publicPath}/` : 'auto',
+        },
+        plugins: [
+            new MiniCssExtractPlugin({
+                filename: '[name]/[name].[contenthash].css',
+            }),
+            new CssMinimizePlugin(),
+            ...appNames.map((appName) => {
+                const faviconPath = `./apps/${appName}/resources/images/favicon.ico`;
+                if (!fs.existsSync(faviconPath)) {
+                    return null;
+                }
+                return new FaviconsWebpackPlugin({
+                    logo: `./apps/${appName}/resources/images/favicon.ico`,
+                    outputPath: ASSETS_PATH,
+                    // mode set to light in order to take the ico file as is, as
+                    // the sizing compilation cannot handle ico files
+                    mode: 'light',
+                });
+            }).filter((plugin) => plugin !== null),
+            ...getHtmlPluginConfigs(langCodes, appNames),
+        ],
+        resolve: {
+            modules: [
+                'node_modules',
+                path.resolve(__dirname, 'frameworks'),
+                path.resolve(__dirname, 'frameworks', 'sproutcore', 'frameworks'),
+                path.join(__dirname, 'apps'),
+                path.join(__dirname, 'themes'),
+            ],
+            alias: {
+                jquery: path.resolve(
+                    __dirname,
+                    'frameworks/sproutcore/frameworks/jquery/jquery-1.11.1.js'
+                ),
+            },
+        },
+        module: {
+            rules: [
+                ...getModuleRules(appNames, THEME_PATH, publicPath, MiniCssExtractPlugin),
+            ]
+        }
+    }
+}

@@ -1,0 +1,36 @@
+<% locals.extra = 'mainPage' -%>
+<% include('../copyright_block_js.ejs') %>
+/*globals <%= namespace %> */
+
+// This page describes the main user interface for your application.
+<%= namespace %>.mainPage = SC.Page.extend({
+
+  // The main pane is made visible on screen as soon as your app is loaded.
+  // Add childViews to this pane for views to display immediately on page
+  // load.
+  mainPane: SC.MainPane.extend({
+    childViews: ['labelView'],
+
+    labelView: SC.LabelView.extend({
+      classNames: ['welcome-label'],
+      layout: { centerX: 0, top: 20, width: 300, height: 24 },
+      tagName: "h1",
+      value: "Welcome to SproutCore!"
+    }),
+
+    listView: SC.ScrollView.extend({
+      layout: { centerX: 0, top: 50, width: 300, bottom: 20 },
+      contentView: SC.ListView.extend({
+        contentBinding: '<%= namespace %>.listController.arrangedObjects',
+        selectionBinding: '<%= namespace %>.listController.selection',
+        contentValueKey: "title",
+        rowHeight: 40,
+        canEditContent: YES,
+        canReorderContent: YES,
+        exampleView: SC.CheckboxView.extend({
+          valueBinding: '.parentView.content.isDone'
+        })
+      }),
+    })
+  })
+});

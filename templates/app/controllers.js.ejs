@@ -1,0 +1,10 @@
+<% include('../copyright_block_js.ejs') %>
+
+/*globals <%= namespace %> */
+
+<%= namespace %>.listController = SC.ArrayController.create({
+});
+
+<%= namespace %>.itemController = SC.ObjectController.create({
+    contentBinding: '<%= namespace %>.listController.selection'
+});

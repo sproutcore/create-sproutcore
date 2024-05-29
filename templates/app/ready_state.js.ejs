@@ -1,0 +1,25 @@
+<%= namespace %>.ReadyState = SC.State.extend({
+
+  initialSubstate: 'LOADING',
+
+  LOADING: SC.State.extend({
+    enterState: function() {
+      const items = <%= namespace %>.store.find(<%= namespace %>.Item);
+      <%= namespace %>.listController.set('content', items);
+      this.gotoState('DISPLAY');
+    })
+  });
+
+
+  DISPLAY: SC.State.extend({
+    enterState: function() {
+      <%= namespace %>.getPath('mainPage.mainPane').append();
+    },
+
+    exitState: function() {
+      <%= namespace %>.getPath('mainPage.mainPane').remove();
+    }
+  })
+
+
+});

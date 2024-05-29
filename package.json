@@ -1,0 +1,28 @@
+{
+  "name": "create-sproutcore",
+  "version": "0.0.1",
+  "description": "This creates a new sproutcore project",
+  "main": "./bin/sproutcore.js",
+  "bin": "./bin/sproutcore.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sproutcore/create-sproutcore.git"
+  },
+  "keywords": [
+    "sproutcore"
+  ],
+  "type": "module",
+  "author": "Maurits Lamers",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sproutcore/create-sproutcore/issues"
+  },
+  "homepage": "https://github.com/sproutcore/create-sproutcore#readme",
+  "dependencies": {
+    "commander": "^12.1.0",
+    "ejs": "^3.1.10"
+  }
+}
