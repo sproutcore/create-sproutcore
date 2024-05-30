@@ -19,11 +19,11 @@ function generateProject (name) {
 
   createProject(name, projectPath);
 
-  console.log(`\n\nProject ${name} created at ${projectPath}`);
+  console.log(`\n\nCongratulations! Project ${name} created at ${projectPath}`);
   console.log('To start the project, run the following commands:');
   console.log(`\n> cd ${name}`);
   console.log('> npm start');
-  console.log('\nwait till webpack reports ready, and then open http://localhost:4020 in your browser.\n');
+  console.log('\nWait till webpack reports ready, and then open http://localhost:4020 in your browser.\n');
 }
 
 function generateApp (name) {

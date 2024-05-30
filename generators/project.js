@@ -32,10 +32,10 @@ export const createProject = (name, basePath) => {
 
     const paths = [
         'package.json',
-        'webpack.common.js',
-        'webpack.dev.js',
-        'webpack.prod.js',
-        'webpack.config.js',
+        'webpack.common.mjs',
+        'webpack.dev.mjs',
+        'webpack.prod.mjs',
+        'webpack.config.mjs',
     ];
 
     fs.writeFileSync(path.join(name, '.gitignore'), 'node_modules');
@@ -67,9 +67,9 @@ export const createProject = (name, basePath) => {
 
     console.log('Running npm install...');
     // run npm install in the project folder
-    // execSync('npm install', { cwd: name, stdio: 'inherit'});
-    // now we should have sproutcore, so we can create the base app
+    execSync('npm install', { cwd: name, stdio: 'inherit'});
 
+    // now we should have sproutcore, so we can create the base app
     console.log('Rendering rest of the project files...');
 
     // now create the base app

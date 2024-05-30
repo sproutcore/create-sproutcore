@@ -59,5 +59,7 @@ export const createApp = (name, basePath) => {
     });
 
     // run the updateIndexjs cli command from sproutcore
-    // execSync(`npx sproutcore updateIndexjs ${basePath}`, { stdio: 'inherit' });
+    console.log('Generating index.js file...');
+    const scPath = path.resolve(basePath, '..', '..', 'node_modules', 'sproutcore');
+    execSync(`npx --yes --package=${scPath} -c 'create_indexjs ${basePath}'`, { stdio: 'inherit' });
 }
